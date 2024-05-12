@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import F
 from author.models import Author
 from editorial.models import Editorial
 
@@ -36,6 +37,14 @@ class Purchase(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='my_shopping')
     status = models.IntegerField(choices=PurchaseStatus.choices, default=PurchaseStatus.CART)
     
+    #atributo imaginário no banco de dados
+    @property 
+    def total(self): 
+        #multiplicando quantidade e preço de livros com F
+        queryset = self.items.all().aggregate(
+            total=models.Sum(F('quantity') * F('books__price'))
+        )
+        return queryset['total']
 
 class PurchaseItems(models.Model):
     class Meta:
@@ -45,7 +54,6 @@ class PurchaseItems(models.Model):
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='items')
     books = models.ForeignKey(Books, on_delete=models.PROTECT, related_name='+')
     quantity = models.IntegerField()
-    
     
     
     
