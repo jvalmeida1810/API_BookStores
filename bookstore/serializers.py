@@ -48,6 +48,7 @@ class CreateEditPurchaseItemsSerializer(serializers.ModelSerializer):
         
 class CreateEditPurchaseSerializer(serializers.ModelSerializer):
         items = CreateEditPurchaseItemsSerializer(many=True)
+        user = serializers.HiddenField(default=serializers.CurrentUserDefault())
         
         class Meta:
             model = Purchase

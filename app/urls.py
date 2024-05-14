@@ -7,6 +7,7 @@ urlpatterns = [
     path('api/v1/', include('author.urls')),
     path('api/v1/', include('editorial.urls')),
     path('api/v1/', include('authentication.urls')),
+    path('api/v1/', include('spectacular.urls')),
     
     
 ]
